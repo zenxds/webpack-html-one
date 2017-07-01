@@ -1,0 +1,20 @@
+{
+  "name": "webpack-html-one",
+  "version": "0.1.0",
+  "description": "webpack plugin to combine css/js into html",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:zenxds/webpack-html-one.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "zenxds",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.1",
+    "html-minifier": "^3.5.2",
+    "webpack-sources": "^1.0.1"
+  }
+}
