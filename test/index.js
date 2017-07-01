@@ -8,6 +8,7 @@ const Plugin = require('..')
 const compiler = webpack({
   entry: `${__dirname}/entry.js`,
   output: {
+    publicPath: "./",
     path: `${__dirname}/dist`,
     filename: 'bundle.js',
   },

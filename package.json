@@ -1,6 +1,6 @@
 {
   "name": "webpack-html-one",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "webpack plugin to combine css/js into html",
   "main": "index.js",
   "repository": {

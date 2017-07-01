@@ -15,40 +15,43 @@ class Plugin {
     compiler.plugin("emit", function(compilation, callback) {
       const assets = compilation.assets
       const names = Object.keys(assets)
-      const html = names.find(name => /\.html$/i.test(name))
 
-      if (!html) {
-        callback()
-        return
-      }
-
-      const $ = cheerio.load(assets[html].source())
-
-      $('link[rel="stylesheet"], script').each((index, elem) => {
-        const $elem = $(elem)
-        let src = $elem.attr('href') || $elem.attr('src')
-        if (!src) {
+      names.forEach((name) => {
+        if (!/\.html$/i.test(name)) {
           return
         }
 
-        src = src.split('?')[0]
-        if (!assets[src]) {
-          return
-        }
+        const $ = cheerio.load(assets[name].source())
 
-        if (/\.css$/i.test(src)) {
-          $elem.replaceWith(`<style>${assets[src].source()}</style>`)
-          delete assets[src]                  
-        }
-        if (/\.js$/i.test(src)) {
-          $elem.replaceWith(`<script>${assets[src].source()}</script>`)
-          delete assets[src]                  
-        }
+        $('link[rel="stylesheet"], script').each((index, elem) => {
+          const $elem = $(elem)
+          const src = $elem.attr('href') || $elem.attr('src')
+          if (!src) {
+            return
+          }
+
+          const asset = names.find(name => {
+            return src.indexOf(name) > -1
+          })
+          if (!asset || !assets[asset]) {
+            return
+          }
+
+          if (/\.css$/i.test(asset)) {
+            $elem.replaceWith(`<style>${assets[asset].source()}</style>`)
+            delete assets[asset]                  
+          }
+          if (/\.js$/i.test(asset)) {
+            $elem.replaceWith(`<script>${assets[asset].source()}</script>`)
+            delete assets[asset]                  
+          }
+        })
+
+        assets[name] = new webpackSources.RawSource(options.minify ? minify($.html(), {
+          collapseWhitespace: true
+        }) : $.html())
       })
 
-      assets[html] = new webpackSources.RawSource(options.minify ? minify($.html(), {
-        collapseWhitespace: true
-      }) : $.html())
       callback()
     })
   }
