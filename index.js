@@ -36,6 +36,20 @@ class Plugin {
         delete assets[js]
       }
 
+      $('link, script').each((index, elem) => {
+        const $elem = $(elem)
+        let src = $elem.attr('href') || $elem.attr('src')
+        if (!src) {
+          return
+        }
+
+        src = src.split('?')[0]
+
+        if (src === css || src === js) {
+          $elem.remove()
+        }
+      })
+
       assets[html] = new webpackSources.RawSource(options.minify ? minify($.html(), {
         collapseWhitespace: true
       }) : $.html())

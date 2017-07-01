@@ -1,6 +1,6 @@
 {
   "name": "webpack-html-one",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "webpack plugin to combine css/js into html",
   "main": "index.js",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "git@github.com:zenxds/webpack-html-one.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava test/index.js"
   },
   "author": "zenxds",
   "license": "ISC",
@@ -16,5 +16,13 @@
     "cheerio": "^1.0.0-rc.1",
     "html-minifier": "^3.5.2",
     "webpack-sources": "^1.0.1"
+  },
+  "devDependencies": {
+    "ava": "^0.20.0",
+    "css-loader": "^0.28.4",
+    "extract-text-webpack-plugin": "^2.1.2",
+    "html-webpack-plugin": "^2.29.0",
+    "memory-fs": "^0.4.1",
+    "webpack": "^3.0.0"
   }
 }
