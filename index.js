@@ -16,8 +16,6 @@ class Plugin {
       const assets = compilation.assets
       const names = Object.keys(assets)
       const html = names.find(name => /\.html$/i.test(name))
-      const css = names.find(name => /\.css$/i.test(name))
-      const js = names.find(name => /\.js$/i.test(name))
 
       if (!html) {
         callback()
@@ -25,18 +23,8 @@ class Plugin {
       }
 
       const $ = cheerio.load(assets[html].source())
-      const $head = $('head')
-      const $body = $('body')
-      if (css) {
-        $head.append(`<style>${assets[css].source()}</style>`)
-        delete assets[css]
-      }
-      if (js) {
-        $body.append(`<script>${assets[js].source()}</script>`)
-        delete assets[js]
-      }
 
-      $('link, script').each((index, elem) => {
+      $('link[rel="stylesheet"], script').each((index, elem) => {
         const $elem = $(elem)
         let src = $elem.attr('href') || $elem.attr('src')
         if (!src) {
@@ -44,9 +32,17 @@ class Plugin {
         }
 
         src = src.split('?')[0]
+        if (!assets[src]) {
+          return
+        }
 
-        if (src === css || src === js) {
-          $elem.remove()
+        if (/\.css$/i.test(src)) {
+          $elem.replaceWith(`<style>${assets[src].source()}</style>`)
+          delete assets[src]                  
+        }
+        if (/\.js$/i.test(src)) {
+          $elem.replaceWith(`<script>${assets[src].source()}</script>`)
+          delete assets[src]                  
         }
       })
 
