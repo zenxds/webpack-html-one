@@ -1,12 +1,14 @@
+const defaults = require('lodash.defaults')
 const webpackSources = require('webpack-sources')
 const cheerio = require('cheerio')
 const minify = require('html-minifier').minify
 
 class Plugin {
-  constructor(options) {
-    this.options = Object.assign({
-      minify: true
-    }, options || {})
+  constructor(options={}) {
+    this.options = defaults(options, {
+      minify: true,
+      decodeEntities: true
+    })
   }
 
   apply(compiler) {
@@ -21,7 +23,9 @@ class Plugin {
           return
         }
 
-        const $ = cheerio.load(assets[name].source())
+        const $ = cheerio.load(assets[name].source(), {
+          decodeEntities: options.decodeEntities
+        })
 
         $('link[rel="stylesheet"], script').each((index, elem) => {
           const $elem = $(elem)
